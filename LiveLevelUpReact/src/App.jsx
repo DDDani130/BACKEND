@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
+import BackendConnection from './components/BackendConnection';
 import LoginTriangle from './pages/login/LoginTriangle';
 import Home from './pages/home/Home';
 import SaludPlaneta from './pages/home/saludplaneta/SaludPlaneta';
@@ -15,6 +16,7 @@ export default function App() {
   
   return (
     <ThemeProvider>
+      <BackendConnection />
       <Router>
         <Routes>
           <Route path="/login" element={<LoginTriangle />} />

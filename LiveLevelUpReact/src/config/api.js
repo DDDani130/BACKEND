@@ -1,6 +1,6 @@
 // Configuración de la API
 const API_CONFIG = {
-  // URL base de la API
+  // URL base de la API - Conectada al backend
   BASE_URL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api',
   
   // Timeout para las peticiones (en milisegundos)
@@ -11,7 +11,7 @@ const API_CONFIG = {
     'Content-Type': 'application/json',
   },
   
-  // Endpoints de la API
+  // Endpoints de la API - Todos conectados al backend
   ENDPOINTS: {
     // Autenticación
     AUTH: {
@@ -167,7 +167,7 @@ class ApiService {
       
       // Si es un error de red
       if (error.name === 'TypeError') {
-        throw new Error('Error de conexión. Verifica tu conexión a internet');
+        throw new Error('Error de conexión. Verifica que el backend esté corriendo en http://localhost:5000');
       }
       
       throw error;
@@ -361,6 +361,16 @@ class ApiService {
       impact,
       peopleCount
     });
+  }
+
+  // Método para verificar conexión con el backend
+  async checkBackendConnection() {
+    try {
+      const response = await this.get('/health-check');
+      return { connected: true, data: response };
+    } catch (error) {
+      return { connected: false, error: error.message };
+    }
   }
 }
 

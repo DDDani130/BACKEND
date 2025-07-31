@@ -1,3 +1,7 @@
+// Configurar dotenv PRIMERO
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
@@ -5,7 +9,6 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import compression from 'compression';
 import rateLimit from 'express-rate-limit';
-import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -19,9 +22,6 @@ import communityRoutes from './routes/community.js';
 import aiRoutes from './routes/ai.js';
 import achievementsRoutes from './routes/achievements.js';
 import tipsRoutes from './routes/tips.js';
-
-// Configurar dotenv
-dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -153,18 +153,24 @@ app.listen(PORT, () => {
 });
 
 // Manejo de señales de terminación
-process.on('SIGTERM', () => {
+process.on('SIGTERM', async () => {
   console.log('🛑 Recibida señal SIGTERM, cerrando servidor...');
-  mongoose.connection.close(() => {
+  try {
+    await mongoose.connection.close();
     console.log('✅ Conexión a MongoDB cerrada');
-    process.exit(0);
-  });
+  } catch (error) {
+    console.error('❌ Error cerrando conexión a MongoDB:', error);
+  }
+  process.exit(0);
 });
 
-process.on('SIGINT', () => {
+process.on('SIGINT', async () => {
   console.log('🛑 Recibida señal SIGINT, cerrando servidor...');
-  mongoose.connection.close(() => {
+  try {
+    await mongoose.connection.close();
     console.log('✅ Conexión a MongoDB cerrada');
-    process.exit(0);
-  });
+  } catch (error) {
+    console.error('❌ Error cerrando conexión a MongoDB:', error);
+  }
+  process.exit(0);
 }); 

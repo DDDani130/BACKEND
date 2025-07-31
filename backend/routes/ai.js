@@ -6,10 +6,15 @@ import User from '../models/User.js';
 
 const router = express.Router();
 
-// Configurar OpenAI
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-});
+// Función para obtener instancia de OpenAI
+const getOpenAI = () => {
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error('OPENAI_API_KEY no está configurada');
+  }
+  return new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY
+  });
+};
 
 // Función para generar consejo personalizado
 const generatePersonalizedAdvice = async (userData, context) => {
@@ -51,6 +56,7 @@ Genera un consejo personalizado, motivador y útil que:
 Responde solo con el consejo, sin explicaciones adicionales.
 `;
 
+    const openai = getOpenAI();
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
