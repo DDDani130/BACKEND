@@ -57,7 +57,7 @@ app.use(morgan('combined'));
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
     ? ['https://yourdomain.com'] 
-    : ['http://localhost:3000', 'http://localhost:5173'],
+    : ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5176'],
   credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));
@@ -94,6 +94,26 @@ app.get('/api/health-check', (req, res) => {
     message: 'LiveLevelUp Backend funcionando correctamente',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development'
+  });
+});
+
+// Ruta de prueba para /api
+app.get('/api', (req, res) => {
+  res.json({
+    message: 'LiveLevelUp API funcionando correctamente',
+    endpoints: {
+      auth: '/api/auth',
+      users: '/api/users',
+      avatar: '/api/avatar',
+      health: '/api/health',
+      planet: '/api/planet',
+      community: '/api/community',
+      ai: '/api/ai',
+      achievements: '/api/achievements',
+      tips: '/api/tips',
+      healthCheck: '/api/health-check'
+    },
+    timestamp: new Date().toISOString()
   });
 });
 
